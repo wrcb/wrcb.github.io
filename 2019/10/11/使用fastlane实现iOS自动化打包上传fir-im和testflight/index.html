@@ -1,0 +1,253 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>基于fastlane实现iOS自动化打包上传fir.im和testflight | WRCB‘S Blog</title><meta name="keywords" content="iOS自动化打包"><meta name="author" content="WRCB"><meta name="copyright" content="WRCB"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="前言日复一日重复打包工作，是在浪费宝贵的时间 自动化打包工具应运而生，是我们解放双手的利器 fastlane官方文档 github地址 安装fastlane安装最新的Xcode命令行工具 可以Developer Apple上手动下载对应的Command Line Tools 安装  fastlane官方推荐的xcode-select --install 安装时最后结果是不能安装该软件 安装 fas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于fastlane实现iOS自动化打包上传fir.im和testflight">
+<meta property="og:url" content="http://10.200.66.24/2019/10/11/%E4%BD%BF%E7%94%A8fastlane%E5%AE%9E%E7%8E%B0iOS%E8%87%AA%E5%8A%A8%E5%8C%96%E6%89%93%E5%8C%85%E4%B8%8A%E4%BC%A0fir-im%E5%92%8Ctestflight/index.html">
+<meta property="og:site_name" content="WRCB‘S Blog">
+<meta property="og:description" content="前言日复一日重复打包工作，是在浪费宝贵的时间 自动化打包工具应运而生，是我们解放双手的利器 fastlane官方文档 github地址 安装fastlane安装最新的Xcode命令行工具 可以Developer Apple上手动下载对应的Command Line Tools 安装  fastlane官方推荐的xcode-select --install 安装时最后结果是不能安装该软件 安装 fas">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2019-10-11T08:41:33.000Z">
+<meta property="article:modified_time" content="2020-12-24T01:41:02.500Z">
+<meta property="article:author" content="WRCB">
+<meta property="article:tag" content="iOS自动化打包">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://10.200.66.24/2019/10/11/%E4%BD%BF%E7%94%A8fastlane%E5%AE%9E%E7%8E%B0iOS%E8%87%AA%E5%8A%A8%E5%8C%96%E6%89%93%E5%8C%85%E4%B8%8A%E4%BC%A0fir-im%E5%92%8Ctestflight/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}
+
+// https://stackoverflow.com/questions/16839698/jquery-getscript-alternative-in-native-javascript
+const getScript = url => new Promise((resolve, reject) => {
+  const script = document.createElement('script')
+  script.src = url
+  script.async = true
+  script.onerror = reject
+  script.onload = script.onreadystatechange = function() {
+    const loadState = this.readyState
+    if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+    script.onload = script.onreadystatechange = null
+    resolve()
+  }
+  document.head.appendChild(script)
+})</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2020-12-24 09:41:02'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/atom.xml" title="WRCB‘S Blog" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/null" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">WRCB‘S Blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">基于fastlane实现iOS自动化打包上传fir.im和testflight</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2019-10-11T08:41:33.000Z" title="发表于 2019-10-11 16:41:33">2019-10-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2020-12-24T01:41:02.500Z" title="更新于 2020-12-24 09:41:02">2020-12-24</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/iOS/">iOS</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><em>日复一日重复打包工作，是在浪费宝贵的时间</em></p>
+<p><em>自动化打包工具应运而生，是我们解放双手的利器</em></p>
+<p><a target="_blank" rel="noopener" href="https://docs.fastlane.tools/">fastlane官方文档</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/fastlane/fastlane/tree/master/fastlane/docs#fastfile">github地址</a></p>
+<h2 id="安装fastlane"><a href="#安装fastlane" class="headerlink" title="安装fastlane"></a>安装fastlane</h2><h3 id="安装最新的Xcode命令行工具"><a href="#安装最新的Xcode命令行工具" class="headerlink" title="安装最新的Xcode命令行工具"></a>安装最新的Xcode命令行工具</h3><blockquote>
+<p>可以<a target="_blank" rel="noopener" href="https://developer.apple.com/download/more/">Developer Apple</a>上手动下载对应的<code>Command Line Tools</code> 安装</p>
+</blockquote>
+<p><em>fastlane官方推荐的<code>xcode-select --install</code> 安装时最后结果是<strong>不能安装该软件</strong></em></p>
+<h3 id="安装-fastlane"><a href="#安装-fastlane" class="headerlink" title="安装 fastlane"></a>安装 fastlane</h3><p><em>放到<code>/usr/local/bin</code>下面</em></p>
+<p><code>sudo gem install -n /usr/local/bin fastlane</code></p>
+<p>其他的安装方法：（扩展，可跳过）</p>
+<p><img src="1970838-d07d8f2b55853319.png"></p>
+<blockquote>
+<p>第一种是通过 Homebrew 软件包管理器来进行安装，<br>第二种就是我们最熟悉的方式，下载安装包来进行安装,<br>第三种是通过 RubyGems 来进行，RubyGems 是一个方便的 Ruby 程序包管理器，可以将一个 Ruby 应用程序打包到一个 Gem 里，作为一个安装单元。 一个  Gem 就是一个封装起来的应用程序或代码库</p>
+</blockquote>
+<h2 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h2><p>添加用户环境变量 </p>
+<p><code>vim ~/.bash_profile</code></p>
+<p>添加</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">export PATH&#x3D;&#x2F;usr&#x2F;local&#x2F;bin:$PATH</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>保存退出，使用 <code>source ~/.bash_profile</code> 来使配置立即生效</p>
+<p>现在在项目根目录下可以使用<code>fastlane</code>了</p>
+<h2 id="fastlane使用"><a href="#fastlane使用" class="headerlink" title="fastlane使用"></a>fastlane使用</h2><h3 id="在项目根目录下初始化"><a href="#在项目根目录下初始化" class="headerlink" title="在项目根目录下初始化"></a>在项目根目录下初始化</h3><p><code>fastlane init</code></p>
+<ul>
+<li><p>四个选项</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">What would you like to use fastlane for?</span><br><span class="line"></span><br><span class="line">1.Automate screenshots</span><br><span class="line">2.Automate beta distribution to TestFlight</span><br><span class="line">3.Automate App Store distribution</span><br><span class="line">4.Manual setup - manually setup your project to automate your tasks</span><br></pre></td></tr></table></figure>
+<p>解释：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1 自动截屏。（帮助我们截取App的显示到appstore上的 截图）</span><br><span class="line">2 自动发布beta到TestFlight上，用于内测。</span><br><span class="line">3 自动打包发布到AppStore上。</span><br><span class="line">4 手动设置。</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ul>
+<p>  上传fir选择的4</p>
+<ul>
+<li>初始化成功会生成如下目录</li>
+</ul>
+<p><img src="Xnip2019-10-09_14-40-37.jpg"></p>
+<h3 id="配置相关文件"><a href="#配置相关文件" class="headerlink" title="配置相关文件"></a>配置相关文件</h3><h4 id="配置Gemfile"><a href="#配置Gemfile" class="headerlink" title="配置Gemfile"></a>配置Gemfile</h4><p>如果使用cocoapods要加上（<em>注意带上当前安装的pod的版本号</em>，否则会报错）</p>
+<p><code>gem &#39;cocoapods&#39;, &#39;~&gt;1.8.3&#39;</code> </p>
+<p>执行 </p>
+<p><code>bundle install</code></p>
+<blockquote>
+<p>第一次运行 bundle install 时自动生成 Gemfile.lock 文件。以后每次运行 bundle install 时,如果 Gemfile 中的条目不变 bundle 就不会再次计算 gem 依赖版本号，直接根据 Gemfile.lock 检查和安装 gem。如果出现依赖冲突时可以通过 bundle update 更新 Gemfile.lock</p>
+</blockquote>
+<h4 id="配置Fastfile"><a href="#配置Fastfile" class="headerlink" title="配置Fastfile"></a>配置Fastfile</h4><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span><span class="title">ault_platform</span><span class="params">(<span class="symbol">:ios</span>)</span></span></span><br><span class="line"></span><br><span class="line">platform <span class="symbol">:ios</span> <span class="keyword">do</span></span><br><span class="line">  </span><br><span class="line">  	before_all <span class="keyword">do</span></span><br><span class="line">    	<span class="comment"># 如果你用 pod install</span></span><br><span class="line">    	cocoapods </span><br><span class="line">  	<span class="keyword">end</span></span><br><span class="line">  </span><br><span class="line">  	desc <span class="string">&quot;打包上传ipa到fir.im&quot;</span></span><br><span class="line">  	lane <span class="symbol">:fir</span> <span class="keyword">do</span></span><br><span class="line">    </span><br><span class="line">  	<span class="comment"># 如果你没有申请adhoc证书，sigh会自动帮你申请，并且添加到Xcode里</span></span><br><span class="line">  	<span class="comment">#	sigh(adhoc: true)</span></span><br><span class="line">      </span><br><span class="line">  	<span class="comment"># 以下两个action来自fastlane-plugin-versioning，</span></span><br><span class="line">  	<span class="comment"># 第一个递增 Build，第二个设定Version。</span></span><br><span class="line">  	<span class="comment"># 如果你有多个target，就必须指定target的值，否则它会直接找找到的第一个plist修改</span></span><br><span class="line">  	<span class="comment"># 在这里我建议每一个打的包的Build都要不一样，这样crash了拿到日志，可以对应到ipa上</span></span><br><span class="line">  </span><br><span class="line">    increment_build_number_in_plist(</span><br><span class="line">        <span class="symbol">target:</span> <span class="string">&#x27;TestDemo&#x27;</span>,</span><br><span class="line"> 				<span class="symbol">build_number:</span> <span class="string">&#x27;5&#x27;</span></span><br><span class="line">    )</span><br><span class="line">    increment_version_number_in_plist(</span><br><span class="line">        <span class="symbol">target:</span> <span class="string">&#x27;TestDemo&#x27;</span>,</span><br><span class="line">        <span class="symbol">version_number:</span> <span class="string">&#x27;1.0&#x27;</span></span><br><span class="line">    )</span><br><span class="line">    <span class="comment"># gym用来编译ipa</span></span><br><span class="line">    gym(</span><br><span class="line">        <span class="symbol">scheme:</span> <span class="string">&#x27;TestDemo&#x27;</span>,</span><br><span class="line">        <span class="symbol">export_method:</span> <span class="string">&quot;ad-hoc&quot;</span>, <span class="comment"># 指定打包方式 [&quot;app-store&quot;, &quot;ad-hoc&quot;, &quot;package&quot;, &quot;enterprise&quot;, &quot;development&quot;, &quot;developer-id&quot;]</span></span><br><span class="line">        <span class="comment">#teamID: &quot;xxxxxx&quot;,  # developer.apple.com 上查看</span></span><br><span class="line">        <span class="symbol">xcargs:</span> <span class="string">&quot;-allowProvisioningUpdates&quot;</span>,</span><br><span class="line">        <span class="symbol">output_directory:</span> <span class="string">&#x27;./firim&#x27;</span>,</span><br><span class="line">        <span class="symbol">output_name:</span> <span class="string">&#x27;TestDemo.ipa&#x27;</span></span><br><span class="line">    )</span><br><span class="line">    <span class="comment"># 上传ipa到fir.im服务器，在fir.im获取firim_api_token</span></span><br><span class="line">    firim(<span class="symbol">firim_api_token:</span> <span class="string">&quot;xxxxxxxxxxxxx&quot;</span>)  <span class="comment"># token 在fir 上查看。</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line">  </span><br><span class="line">  desc <span class="string">&quot;打包上传testflight/app-store&quot;</span></span><br><span class="line">  lane <span class="symbol">:tf</span> <span class="keyword">do</span></span><br><span class="line"></span><br><span class="line">    increment_build_number_in_plist(</span><br><span class="line">        <span class="symbol">target:</span> <span class="string">&#x27;TestDemo&#x27;</span></span><br><span class="line">    )</span><br><span class="line">    increment_version_number_in_plist(</span><br><span class="line">        <span class="symbol">target:</span> <span class="string">&#x27;TestDemo&#x27;</span>,</span><br><span class="line">        <span class="symbol">version_number:</span> <span class="string">&#x27;1.0&#x27;</span></span><br><span class="line">    )</span><br><span class="line">    <span class="comment"># gym用来编译ipa</span></span><br><span class="line">    gym(</span><br><span class="line">        <span class="symbol">scheme:</span> <span class="string">&#x27;TestDemo&#x27;</span>,</span><br><span class="line">        <span class="symbol">export_method:</span> <span class="string">&quot;app-store&quot;</span>, <span class="comment"># 指定打包方式</span></span><br><span class="line">        <span class="comment">#teamID: &quot;xxxxxx&quot;,  # developer.apple.com 上查看</span></span><br><span class="line">        <span class="symbol">xcargs:</span> <span class="string">&quot;-allowProvisioningUpdates&quot;</span>,</span><br><span class="line">        <span class="symbol">output_directory:</span> <span class="string">&#x27;./testflight&#x27;</span>,</span><br><span class="line">        <span class="symbol">output_name:</span> <span class="string">&#x27;TestDemo.ipa&#x27;</span></span><br><span class="line">    )</span><br><span class="line">    <span class="comment">#upload_to_testflight</span></span><br><span class="line">    appstore       <span class="comment"># 上传你的App iTunes Connect</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>关于build_number与version_number</p>
+<p>1,version_number、build_number都没有设置，会自动获取项目的version和build版本号，并且都自动加1。例如，fastlane打包前后版本号变化：ver1.0.2（Build 11）-&gt; ver1.0.3（Build 12）；<br>2,version_number设置了、build_number没设置，会自动获取项目build版本号，build版本号+1；<br>3,version_number、build_number都设置了，那打包出来的版本号就是设置的版本号，不会自动+1；</p>
+</blockquote>
+<h4 id="添加两个插件"><a href="#添加两个插件" class="headerlink" title="添加两个插件"></a>添加两个插件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fastlane add_plugin versioning</span><br><span class="line">fastlane add_plugin firim</span><br></pre></td></tr></table></figure>
+<h3 id="执行打包"><a href="#执行打包" class="headerlink" title="执行打包"></a>执行打包</h3><h4 id="上传fir-im"><a href="#上传fir-im" class="headerlink" title="上传fir.im"></a>上传fir.im</h4><p><code>fastlane fir</code></p>
+<blockquote>
+<p><code>fir</code>为Fastfile文件中<code>lane :fir do</code>处设置的名字，可以为别的名字</p>
+</blockquote>
+<p>执行打包成功如下图所示：</p>
+<img src="Xnip2019-10-10_15-01-27.jpg" style="zoom:5%" />
+
+<ul>
+<li><p>根目录下<code>firim</code>文件夹下可看到<code>ipa</code>文件</p>
+<p><img src="Xnip2019-10-10_15-22-43.jpg"></p>
+</li>
+<li><p>fir.im应用列表，多了刚上传的项目</p>
+<p><img src="Xnip2019-10-10_15-01-59.jpg"></p>
+</li>
+</ul>
+<h4 id="上传testFlight"><a href="#上传testFlight" class="headerlink" title="上传testFlight"></a>上传testFlight</h4><p><code>fastlane tf</code></p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol>
+<li>Could not find action, lane or variable ‘increment_build_number_in_plist’…</li>
+</ol>
+<p><img src="Xnip2019-10-10_11-39-52.jpg"></p>
+<ul>
+<li><p>解决：</p>
+<p><code>fastlane add_plugin versioning</code></p>
+</li>
+</ul>
+<p>参考：<a target="_blank" rel="noopener" href="https://github.com/SiarheiFedartsou/fastlane-plugin-versioning/issues/20">https://github.com/SiarheiFedartsou/fastlane-plugin-versioning/issues/20</a></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/2918cf082b9d">fastlane 自动打包到 fir.im 的踩坑之路</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.fastlane.tools/getting-started/ios/setup/">fastlane ios快读入门文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/19ae8cc865b0">fastlane使用说明书</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/48343a655f75">fastlane 在mac上配置iOS自动化上架</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/eab3e1ded17d">iOS 自动打包 - fastlane （一）</a></li>
+<li><a target="_blank" rel="noopener" href="https://juejin.im/post/5a7d51986fb9a063435ece35">和重复劳动说再见-使用fastlane进行iOS打包</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/25976099">macOS/Linux 环境变量设置</a></li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">WRCB</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://10.200.66.24/2019/10/11/%E4%BD%BF%E7%94%A8fastlane%E5%AE%9E%E7%8E%B0iOS%E8%87%AA%E5%8A%A8%E5%8C%96%E6%89%93%E5%8C%85%E4%B8%8A%E4%BC%A0fir-im%E5%92%8Ctestflight/">http://10.200.66.24/2019/10/11/%E4%BD%BF%E7%94%A8fastlane%E5%AE%9E%E7%8E%B0iOS%E8%87%AA%E5%8A%A8%E5%8C%96%E6%89%93%E5%8C%85%E4%B8%8A%E4%BC%A0fir-im%E5%92%8Ctestflight/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://10.200.66.24" target="_blank">WRCB‘S Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/iOS%E8%87%AA%E5%8A%A8%E5%8C%96%E6%89%93%E5%8C%85/">iOS自动化打包</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/12/23/hello-world/"><img class="prev-cover" src="/" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Hello World</div></div></a></div><div class="next-post pull-right"><a href="/2019/09/26/%E5%9F%BA%E4%BA%8EHexo%E5%92%8CGithub%E6%90%AD%E5%BB%BA%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">基于Hexo和Github搭建技术博客</div></div></a></div></nav></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="/null" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">WRCB</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85fastlane"><span class="toc-number">2.</span> <span class="toc-text">安装fastlane</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%9C%80%E6%96%B0%E7%9A%84Xcode%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7"><span class="toc-number">2.1.</span> <span class="toc-text">安装最新的Xcode命令行工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-fastlane"><span class="toc-number">2.2.</span> <span class="toc-text">安装 fastlane</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">3.</span> <span class="toc-text">配置环境变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fastlane%E4%BD%BF%E7%94%A8"><span class="toc-number">4.</span> <span class="toc-text">fastlane使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E9%A1%B9%E7%9B%AE%E6%A0%B9%E7%9B%AE%E5%BD%95%E4%B8%8B%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">4.1.</span> <span class="toc-text">在项目根目录下初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3%E6%96%87%E4%BB%B6"><span class="toc-number">4.2.</span> <span class="toc-text">配置相关文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEGemfile"><span class="toc-number">4.2.1.</span> <span class="toc-text">配置Gemfile</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEFastfile"><span class="toc-number">4.2.2.</span> <span class="toc-text">配置Fastfile</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E4%B8%A4%E4%B8%AA%E6%8F%92%E4%BB%B6"><span class="toc-number">4.2.3.</span> <span class="toc-text">添加两个插件</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E6%89%93%E5%8C%85"><span class="toc-number">4.3.</span> <span class="toc-text">执行打包</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%8A%E4%BC%A0fir-im"><span class="toc-number">4.3.1.</span> <span class="toc-text">上传fir.im</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%8A%E4%BC%A0testFlight"><span class="toc-number">4.3.2.</span> <span class="toc-text">上传testFlight</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98"><span class="toc-number">5.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><div class="content"><a class="title" href="/2020/12/23/hello-world/" title="Hello World">Hello World</a><time datetime="2020-12-23T02:31:03.872Z" title="发表于 2020-12-23 10:31:03">2020-12-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2019/10/11/%E4%BD%BF%E7%94%A8fastlane%E5%AE%9E%E7%8E%B0iOS%E8%87%AA%E5%8A%A8%E5%8C%96%E6%89%93%E5%8C%85%E4%B8%8A%E4%BC%A0fir-im%E5%92%8Ctestflight/" title="基于fastlane实现iOS自动化打包上传fir.im和testflight"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="基于fastlane实现iOS自动化打包上传fir.im和testflight"/></a><div class="content"><a class="title" href="/2019/10/11/%E4%BD%BF%E7%94%A8fastlane%E5%AE%9E%E7%8E%B0iOS%E8%87%AA%E5%8A%A8%E5%8C%96%E6%89%93%E5%8C%85%E4%B8%8A%E4%BC%A0fir-im%E5%92%8Ctestflight/" title="基于fastlane实现iOS自动化打包上传fir.im和testflight">基于fastlane实现iOS自动化打包上传fir.im和testflight</a><time datetime="2019-10-11T08:41:33.000Z" title="发表于 2019-10-11 16:41:33">2019-10-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2019/09/26/%E5%9F%BA%E4%BA%8EHexo%E5%92%8CGithub%E6%90%AD%E5%BB%BA%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/" title="基于Hexo和Github搭建技术博客"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="基于Hexo和Github搭建技术博客"/></a><div class="content"><a class="title" href="/2019/09/26/%E5%9F%BA%E4%BA%8EHexo%E5%92%8CGithub%E6%90%AD%E5%BB%BA%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/" title="基于Hexo和Github搭建技术博客">基于Hexo和Github搭建技术博客</a><time datetime="2019-09-26T06:40:33.000Z" title="发表于 2019-09-26 14:40:33">2019-09-26</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 By WRCB</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>

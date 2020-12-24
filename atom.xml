@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>WRCB‘S Blog</title>
+  
+  
+  <link href="http://10.200.66.24/atom.xml" rel="self"/>
+  
+  <link href="http://10.200.66.24/"/>
+  <updated>2020-12-23T02:31:03.872Z</updated>
+  <id>http://10.200.66.24/</id>
+  
+  <author>
+    <name>WRCB</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="http://10.200.66.24/2020/12/23/hello-world/"/>
+    <id>http://10.200.66.24/2020/12/23/hello-world/</id>
+    <published>2020-12-23T02:31:03.872Z</published>
+    <updated>2020-12-23T02:31:03.872Z</updated>
+    
+    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt; for</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>基于fastlane实现iOS自动化打包上传fir.im和testflight</title>
+    <link href="http://10.200.66.24/2019/10/11/%E4%BD%BF%E7%94%A8fastlane%E5%AE%9E%E7%8E%B0iOS%E8%87%AA%E5%8A%A8%E5%8C%96%E6%89%93%E5%8C%85%E4%B8%8A%E4%BC%A0fir-im%E5%92%8Ctestflight/"/>
+    <id>http://10.200.66.24/2019/10/11/%E4%BD%BF%E7%94%A8fastlane%E5%AE%9E%E7%8E%B0iOS%E8%87%AA%E5%8A%A8%E5%8C%96%E6%89%93%E5%8C%85%E4%B8%8A%E4%BC%A0fir-im%E5%92%8Ctestflight/</id>
+    <published>2019-10-11T08:41:33.000Z</published>
+    <updated>2020-12-24T01:41:02.500Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><em>日复一日重复打包工作，是在浪费宝贵的时间</em></p><p><em>自动化打包工具应运而生，是我们解放双手的利器</em></p><p><a href="https://docs.fastlane.tools/">fastlane官方文档</a></p><p><a href="https://github.com/fastlane/fastlane/tree/master/fastlane/docs#fastfile">github地址</a></p><h2 id="安装fastlane"><a href="#安装fastlane" class="headerlink" title="安装fastlane"></a>安装fastlane</h2><h3 id="安装最新的Xcode命令行工具"><a href="#安装最新的Xcode命令行工具" class="headerlink" title="安装最新的Xcode命令行工具"></a>安装最新的Xcode命令行工具</h3><blockquote><p>可以<a href="https://developer.apple.com/download/more/">Developer Apple</a>上手动下载对应的<code>Command Line Tools</code> 安装</p></blockquote><p><em>fastlane官方推荐的<code>xcode-select --install</code> 安装时最后结果是<strong>不能安装该软件</strong></em></p><h3 id="安装-fastlane"><a href="#安装-fastlane" class="headerlink" title="安装 fastlane"></a>安装 fastlane</h3><p><em>放到<code>/usr/local/bin</code>下面</em></p><p><code>sudo gem install -n /usr/local/bin fastlane</code></p><p>其他的安装方法：（扩展，可跳过）</p><p><img src="1970838-d07d8f2b55853319.png"></p><blockquote><p>第一种是通过 Homebrew 软件包管理器来进行安装，<br>第二种就是我们最熟悉的方式，下载安装包来进行安装,<br>第三种是通过 RubyGems 来进行，RubyGems 是一个方便的 Ruby 程序包管理器，可以将一个 Ruby 应用程序打包到一个 Gem 里，作为一个安装单元。 一个  Gem 就是一个封装起来的应用程序或代码库</p></blockquote><h2 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h2><p>添加用户环境变量 </p><p><code>vim ~/.bash_profile</code></p><p>添加</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">export PATH&#x3D;&#x2F;usr&#x2F;local&#x2F;bin:$PATH</span><br><span class="line">...</span><br></pre></td></tr></table></figure><p>保存退出，使用 <code>source ~/.bash_profile</code> 来使配置立即生效</p><p>现在在项目根目录下可以使用<code>fastlane</code>了</p><h2 id="fastlane使用"><a href="#fastlane使用" class="headerlink" title="fastlane使用"></a>fastlane使用</h2><h3 id="在项目根目录下初始化"><a href="#在项目根目录下初始化" class="headerlink" title="在项目根目录下初始化"></a>在项目根目录下初始化</h3><p><code>fastlane init</code></p><ul><li><p>四个选项</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">What would you like to use fastlane for?</span><br><span class="line"></span><br><span class="line">1.Automate screenshots</span><br><span class="line">2.Automate beta distribution to TestFlight</span><br><span class="line">3.Automate App Store distribution</span><br><span class="line">4.Manual setup - manually setup your project to automate your tasks</span><br></pre></td></tr></table></figure><p>解释：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1 自动截屏。（帮助我们截取App的显示到appstore上的 截图）</span><br><span class="line">2 自动发布beta到TestFlight上，用于内测。</span><br><span class="line">3 自动打包发布到AppStore上。</span><br><span class="line">4 手动设置。</span><br></pre></td></tr></table></figure></li></ul><p>  上传fir选择的4</p><ul><li>初始化成功会生成如下目录</li></ul><p><img src="Xnip2019-10-09_14-40-37.jpg"></p><h3 id="配置相关文件"><a href="#配置相关文件" class="headerlink" title="配置相关文件"></a>配置相关文件</h3><h4 id="配置Gemfile"><a href="#配置Gemfile" class="headerlink" title="配置Gemfile"></a>配置Gemfile</h4><p>如果使用cocoapods要加上（<em>注意带上当前安装的pod的版本号</em>，否则会报错）</p><p><code>gem &#39;cocoapods&#39;, &#39;~&gt;1.8.3&#39;</code> </p><p>执行 </p><p><code>bundle install</code></p><blockquote><p>第一次运行 bundle install 时自动生成 Gemfile.lock 文件。以后每次运行 bundle install 时,如果 Gemfile 中的条目不变 bundle 就不会再次计算 gem 依赖版本号，直接根据 Gemfile.lock 检查和安装 gem。如果出现依赖冲突时可以通过 bundle update 更新 Gemfile.lock</p></blockquote><h4 id="配置Fastfile"><a href="#配置Fastfile" class="headerlink" title="配置Fastfile"></a>配置Fastfile</h4><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span><span class="title">ault_platform</span><span class="params">(<span class="symbol">:ios</span>)</span></span></span><br><span class="line"></span><br><span class="line">platform <span class="symbol">:ios</span> <span class="keyword">do</span></span><br><span class="line">  </span><br><span class="line">  before_all <span class="keyword">do</span></span><br><span class="line">    <span class="comment"># 如果你用 pod install</span></span><br><span class="line">    cocoapods </span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line">  </span><br><span class="line">  desc <span class="string">&quot;打包上传ipa到fir.im&quot;</span></span><br><span class="line">  lane <span class="symbol">:fir</span> <span class="keyword">do</span></span><br><span class="line">    </span><br><span class="line">  <span class="comment"># 如果你没有申请adhoc证书，sigh会自动帮你申请，并且添加到Xcode里</span></span><br><span class="line">  <span class="comment">#sigh(adhoc: true)</span></span><br><span class="line">      </span><br><span class="line">  <span class="comment"># 以下两个action来自fastlane-plugin-versioning，</span></span><br><span class="line">  <span class="comment"># 第一个递增 Build，第二个设定Version。</span></span><br><span class="line">  <span class="comment"># 如果你有多个target，就必须指定target的值，否则它会直接找找到的第一个plist修改</span></span><br><span class="line">  <span class="comment"># 在这里我建议每一个打的包的Build都要不一样，这样crash了拿到日志，可以对应到ipa上</span></span><br><span class="line">  </span><br><span class="line">    increment_build_number_in_plist(</span><br><span class="line">        <span class="symbol">target:</span> <span class="string">&#x27;TestDemo&#x27;</span>,</span><br><span class="line"> <span class="symbol">build_number:</span> <span class="string">&#x27;5&#x27;</span></span><br><span class="line">    )</span><br><span class="line">    increment_version_number_in_plist(</span><br><span class="line">        <span class="symbol">target:</span> <span class="string">&#x27;TestDemo&#x27;</span>,</span><br><span class="line">        <span class="symbol">version_number:</span> <span class="string">&#x27;1.0&#x27;</span></span><br><span class="line">    )</span><br><span class="line">    <span class="comment"># gym用来编译ipa</span></span><br><span class="line">    gym(</span><br><span class="line">        <span class="symbol">scheme:</span> <span class="string">&#x27;TestDemo&#x27;</span>,</span><br><span class="line">        <span class="symbol">export_method:</span> <span class="string">&quot;ad-hoc&quot;</span>, <span class="comment"># 指定打包方式 [&quot;app-store&quot;, &quot;ad-hoc&quot;, &quot;package&quot;, &quot;enterprise&quot;, &quot;development&quot;, &quot;developer-id&quot;]</span></span><br><span class="line">        <span class="comment">#teamID: &quot;xxxxxx&quot;,  # developer.apple.com 上查看</span></span><br><span class="line">        <span class="symbol">xcargs:</span> <span class="string">&quot;-allowProvisioningUpdates&quot;</span>,</span><br><span class="line">        <span class="symbol">output_directory:</span> <span class="string">&#x27;./firim&#x27;</span>,</span><br><span class="line">        <span class="symbol">output_name:</span> <span class="string">&#x27;TestDemo.ipa&#x27;</span></span><br><span class="line">    )</span><br><span class="line">    <span class="comment"># 上传ipa到fir.im服务器，在fir.im获取firim_api_token</span></span><br><span class="line">    firim(<span class="symbol">firim_api_token:</span> <span class="string">&quot;xxxxxxxxxxxxx&quot;</span>)  <span class="comment"># token 在fir 上查看。</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line">  </span><br><span class="line">  desc <span class="string">&quot;打包上传testflight/app-store&quot;</span></span><br><span class="line">  lane <span class="symbol">:tf</span> <span class="keyword">do</span></span><br><span class="line"></span><br><span class="line">    increment_build_number_in_plist(</span><br><span class="line">        <span class="symbol">target:</span> <span class="string">&#x27;TestDemo&#x27;</span></span><br><span class="line">    )</span><br><span class="line">    increment_version_number_in_plist(</span><br><span class="line">        <span class="symbol">target:</span> <span class="string">&#x27;TestDemo&#x27;</span>,</span><br><span class="line">        <span class="symbol">version_number:</span> <span class="string">&#x27;1.0&#x27;</span></span><br><span class="line">    )</span><br><span class="line">    <span class="comment"># gym用来编译ipa</span></span><br><span class="line">    gym(</span><br><span class="line">        <span class="symbol">scheme:</span> <span class="string">&#x27;TestDemo&#x27;</span>,</span><br><span class="line">        <span class="symbol">export_method:</span> <span class="string">&quot;app-store&quot;</span>, <span class="comment"># 指定打包方式</span></span><br><span class="line">        <span class="comment">#teamID: &quot;xxxxxx&quot;,  # developer.apple.com 上查看</span></span><br><span class="line">        <span class="symbol">xcargs:</span> <span class="string">&quot;-allowProvisioningUpdates&quot;</span>,</span><br><span class="line">        <span class="symbol">output_directory:</span> <span class="string">&#x27;./testflight&#x27;</span>,</span><br><span class="line">        <span class="symbol">output_name:</span> <span class="string">&#x27;TestDemo.ipa&#x27;</span></span><br><span class="line">    )</span><br><span class="line">    <span class="comment">#upload_to_testflight</span></span><br><span class="line">    appstore       <span class="comment"># 上传你的App iTunes Connect</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure><blockquote><p>关于build_number与version_number</p><p>1,version_number、build_number都没有设置，会自动获取项目的version和build版本号，并且都自动加1。例如，fastlane打包前后版本号变化：ver1.0.2（Build 11）-&gt; ver1.0.3（Build 12）；<br>2,version_number设置了、build_number没设置，会自动获取项目build版本号，build版本号+1；<br>3,version_number、build_number都设置了，那打包出来的版本号就是设置的版本号，不会自动+1；</p></blockquote><h4 id="添加两个插件"><a href="#添加两个插件" class="headerlink" title="添加两个插件"></a>添加两个插件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fastlane add_plugin versioning</span><br><span class="line">fastlane add_plugin firim</span><br></pre></td></tr></table></figure><h3 id="执行打包"><a href="#执行打包" class="headerlink" title="执行打包"></a>执行打包</h3><h4 id="上传fir-im"><a href="#上传fir-im" class="headerlink" title="上传fir.im"></a>上传fir.im</h4><p><code>fastlane fir</code></p><blockquote><p><code>fir</code>为Fastfile文件中<code>lane :fir do</code>处设置的名字，可以为别的名字</p></blockquote><p>执行打包成功如下图所示：</p><img src="Xnip2019-10-10_15-01-27.jpg" style="zoom:5%" /><ul><li><p>根目录下<code>firim</code>文件夹下可看到<code>ipa</code>文件</p><p><img src="Xnip2019-10-10_15-22-43.jpg"></p></li><li><p>fir.im应用列表，多了刚上传的项目</p><p><img src="Xnip2019-10-10_15-01-59.jpg"></p></li></ul><h4 id="上传testFlight"><a href="#上传testFlight" class="headerlink" title="上传testFlight"></a>上传testFlight</h4><p><code>fastlane tf</code></p><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol><li>Could not find action, lane or variable ‘increment_build_number_in_plist’…</li></ol><p><img src="Xnip2019-10-10_11-39-52.jpg"></p><ul><li><p>解决：</p><p><code>fastlane add_plugin versioning</code></p></li></ul><p>参考：<a href="https://github.com/SiarheiFedartsou/fastlane-plugin-versioning/issues/20">https://github.com/SiarheiFedartsou/fastlane-plugin-versioning/issues/20</a></p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol><li><a href="https://www.jianshu.com/p/2918cf082b9d">fastlane 自动打包到 fir.im 的踩坑之路</a></li><li><a href="https://docs.fastlane.tools/getting-started/ios/setup/">fastlane ios快读入门文档</a></li><li><a href="https://www.jianshu.com/p/19ae8cc865b0">fastlane使用说明书</a></li><li><a href="https://www.jianshu.com/p/48343a655f75">fastlane 在mac上配置iOS自动化上架</a></li><li><a href="https://www.jianshu.com/p/eab3e1ded17d">iOS 自动打包 - fastlane （一）</a></li><li><a href="https://juejin.im/post/5a7d51986fb9a063435ece35">和重复劳动说再见-使用fastlane进行iOS打包</a></li><li><a href="https://zhuanlan.zhihu.com/p/25976099">macOS/Linux 环境变量设置</a></li></ol>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;&lt;em&gt;日复一日重复打包工作，是在浪费宝贵的时间&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;自动化打包工具应运而生，是我们解放双手的利器&lt;/em&gt;&lt;/</summary>
+      
+    
+    
+    
+    <category term="iOS" scheme="http://10.200.66.24/categories/iOS/"/>
+    
+    
+    <category term="iOS自动化打包" scheme="http://10.200.66.24/tags/iOS%E8%87%AA%E5%8A%A8%E5%8C%96%E6%89%93%E5%8C%85/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>基于Hexo和Github搭建技术博客</title>
+    <link href="http://10.200.66.24/2019/09/26/%E5%9F%BA%E4%BA%8EHexo%E5%92%8CGithub%E6%90%AD%E5%BB%BA%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/"/>
+    <id>http://10.200.66.24/2019/09/26/%E5%9F%BA%E4%BA%8EHexo%E5%92%8CGithub%E6%90%AD%E5%BB%BA%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/</id>
+    <published>2019-09-26T06:40:33.000Z</published>
+    <updated>2020-12-24T01:25:55.943Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="准备"><a href="#准备" class="headerlink" title="准备:"></a>准备:</h2><p><code>nodejs</code>、<code>git</code>、<code>npm</code>、<code>hexo</code></p><p>验证有没有敲命令，eg: <code>npm -v</code>，没有装先去装</p><ul><li><p>npm可通过homebrew安装</p><p><code>brew install npm</code> </p></li><li><p>Hexo安装</p><p><code>npm install hexo-cli -g</code></p></li></ul><h2 id="开始搭建博客"><a href="#开始搭建博客" class="headerlink" title="开始搭建博客"></a>开始搭建博客</h2><ul><li><p>本地创建一个存放博客文件夹</p><p>eg: SkytechMobileBlog</p></li><li><p>切到<code>SkytechMobileBlog</code>目录下执行<code>初始化</code></p><p><code>hexo init</code></p></li><li><p>然后安装依赖</p><p><code>npm install</code></p></li><li><p>生成静态文件</p><p><code>hexo g</code></p></li><li><p>创建服务</p><p><code>hexo s</code></p></li><li><p>hexo常用命令：</p><table><thead><tr><th>命令</th><th>含义</th></tr></thead><tbody><tr><td><code>hexo init</code></td><td>初始化一个文件夹，它会为这个文件夹配置所有骨架</td></tr><tr><td><code>hexo g</code></td><td>即hexo generate，生成静态文件</td></tr><tr><td><code>hexo s</code></td><td>即hexo server，创建服务</td></tr><tr><td><code>hexo d</code></td><td>即hexo deploy,用于将本地文件发布到github上</td></tr><tr><td><code>hexo n</code></td><td>即hexo new,用于新建一篇文章</td></tr></tbody></table><p>现在只是在本地搭建了一个技术博客，</p><p>要想把博客内容让所有人都能看到，就得借助Github了，把博客内容部署到Github上去</p></li></ul><a id="more"></a><h2 id="部署到github"><a href="#部署到github" class="headerlink" title="部署到github"></a>部署到github</h2><ol><li>GitHub上登录/注册一个账号，创建仓库</li></ol><ul><li><p>如果是团队博客</p><p>先<code>New organization</code>，再<code>New repository</code>（名字为<code>xxx.github.io</code>，<code>xxx</code>为organization名称）</p></li><li><p>如果是个人博客：</p><p><code>New repository</code>（名字为<code>xxx.github.io</code>，<code>xxx</code>为github账号）</p></li></ul><ol start="2"><li>博客的根目录的<code>_config.yml</code>文件的底部<code>deploy</code>设置为：</li></ol><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repository: https:&#x2F;&#x2F;github.com&#x2F;SkytechMobile&#x2F;SkytechMobile.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure><p>注意：冒号（:）后都有一个空格。你可以把此段代码复制过去，并把<code>https://github.com/SkytechMobile/SkytechMobile.github.io.git</code>替换为你自己的Github仓库路径</p><ol start="3"><li><p>部署</p><p>根目录下执行</p><p><code>hexo g</code></p><p><code>hexo d</code></p><p>或者直接</p><p><code>hexo g -d</code></p><p>如果此时报错你可以输入<code>npm install hexo-deployer-git --save</code>来解决</p></li><li><p>以上都没什么问题的话，访 <a href="http://skytechmobile.github.io/">http://SkytechMobile.github.io/</a> 就能看到自己的博客了</p></li></ol><h2 id="主题配置"><a href="#主题配置" class="headerlink" title="主题配置"></a>主题配置</h2><p>Eg: 把主题设置为<code>next</code>，最火的hexo的主题。</p><ol><li><p>下载主题</p><p>在跟目录文件夹下输入如下命令下载next主题</p><p><code>git clone https://github.com/iissnan/hexo-theme-next themes/next</code></p></li><li><p>设置主题</p><p>把<code>SKytechMobileBlog/_config.yml</code>文件称为<code>站点配置</code></p><p>把<code>SKytechMobileBlog/_config.yml</code>文件称为<code>主题配置</code></p></li></ol><p>下载完成后，将<code>站点配置</code>文件的<code>theme</code>字段的值改为<code>next</code>，重新编译并上传到Github上后，访问博客链接，你就会发现主题已经改成next了</p><p>next的默认语言为英文，你可以更改为简体中文，找到并打开<code>站点配置</code>文件，找到<code>language</code>字段，将值改为<code>zh-Hans</code></p><ol start="3"><li>这里介绍下<code>站点配置</code>文件部分字段的含义：</li></ol><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">title: SkytechMobile团队博客 &#x2F;&#x2F; 博客名称</span><br><span class="line">subtitle:   &#x2F;&#x2F; 博客副名称</span><br><span class="line">description:           &#x2F;&#x2F; 描述</span><br><span class="line">author: 晨之科SDK团队    &#x2F;&#x2F; 作者</span><br><span class="line">language: zh-Hans      &#x2F;&#x2F; 语言</span><br></pre></td></tr></table></figure><h2 id="关于新建博客"><a href="#关于新建博客" class="headerlink" title="关于新建博客"></a>关于新建博客</h2><h3 id="一、如何新建博客"><a href="#一、如何新建博客" class="headerlink" title="一、如何新建博客"></a>一、如何新建博客</h3><p>新建命令</p><p><code>hexo new xxx</code></p><p>执行上面的命令即在<code>source/_posts/</code>目录下新建了名为<code>xxx的md文件</code>和<code>资源文件夹</code></p><h3 id="二、将本地博客发布到线上"><a href="#二、将本地博客发布到线上" class="headerlink" title="二、将本地博客发布到线上"></a>二、将本地博客发布到线上</h3><p>生成静态文件，并将本地文件发布到github上，合并执行</p><p><code>hexo g -d</code></p><h3 id="三、写博客注意点"><a href="#三、写博客注意点" class="headerlink" title="三、写博客注意点"></a>三、写博客注意点</h3><ol><li>如何上传带图片的博客？</li></ol><p><img src="useImage.png"></p><ol start="2"><li><p>团队博客设置作者</p><p>可在博客md文件<code>分类</code>字段设置</p><p><code>categories：作者：Fan Chason</code></p></li></ol><p><img src="common_on.png"></p>]]></content>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;准备&quot;&gt;&lt;a href=&quot;#准备&quot; class=&quot;headerlink&quot; title=&quot;准备:&quot;&gt;&lt;/a&gt;准备:&lt;/h2&gt;&lt;p&gt;&lt;code&gt;nodejs&lt;/code&gt;、&lt;code&gt;git&lt;/code&gt;、&lt;code&gt;npm&lt;/code&gt;、&lt;code&gt;hexo&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;验证有没有敲命令，eg: &lt;code&gt;npm -v&lt;/code&gt;，没有装先去装&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;npm可通过homebrew安装&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;brew install npm&lt;/code&gt; &lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Hexo安装&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;npm install hexo-cli -g&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;开始搭建博客&quot;&gt;&lt;a href=&quot;#开始搭建博客&quot; class=&quot;headerlink&quot; title=&quot;开始搭建博客&quot;&gt;&lt;/a&gt;开始搭建博客&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;本地创建一个存放博客文件夹&lt;/p&gt;
+&lt;p&gt;eg: SkytechMobileBlog&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;切到&lt;code&gt;SkytechMobileBlog&lt;/code&gt;目录下执行&lt;code&gt;初始化&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;hexo init&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;然后安装依赖&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;npm install&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;生成静态文件&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;hexo g&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;创建服务&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;hexo s&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;hexo常用命令：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;命令&lt;/th&gt;
+&lt;th&gt;含义&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;hexo init&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;初始化一个文件夹，它会为这个文件夹配置所有骨架&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;hexo g&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;即hexo generate，生成静态文件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;hexo s&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;即hexo server，创建服务&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;hexo d&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;即hexo deploy,用于将本地文件发布到github上&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;hexo n&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;即hexo new,用于新建一篇文章&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;p&gt;现在只是在本地搭建了一个技术博客，&lt;/p&gt;
+&lt;p&gt;要想把博客内容让所有人都能看到，就得借助Github了，把博客内容部署到Github上去&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="关于博客" scheme="http://10.200.66.24/categories/%E5%85%B3%E4%BA%8E%E5%8D%9A%E5%AE%A2/"/>
+    
+    
+    <category term="搭建博客" scheme="http://10.200.66.24/tags/%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/"/>
+    
+  </entry>
+  
+</feed>
