@@ -6,7 +6,7 @@
   <link href="http://10.200.66.24/atom.xml" rel="self"/>
   
   <link href="http://10.200.66.24/"/>
-  <updated>2021-01-19T01:31:16.506Z</updated>
+  <updated>2021-01-19T01:49:26.288Z</updated>
   <id>http://10.200.66.24/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://10.200.66.24/2021/01/08/%E4%BD%A0%E7%9A%84%E4%B8%BB%E6%9C%BA%E4%B8%AD%E7%9A%84%E8%BD%AF%E4%BB%B6%E4%B8%AD%E6%AD%A2%E4%BA%86%E4%B8%80%E4%B8%AA%E5%B7%B2%E5%BB%BA%E7%AB%8B%E7%9A%84%E8%BF%9E%E6%8E%A5Android%20studio%20%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/"/>
     <id>http://10.200.66.24/2021/01/08/%E4%BD%A0%E7%9A%84%E4%B8%BB%E6%9C%BA%E4%B8%AD%E7%9A%84%E8%BD%AF%E4%BB%B6%E4%B8%AD%E6%AD%A2%E4%BA%86%E4%B8%80%E4%B8%AA%E5%B7%B2%E5%BB%BA%E7%AB%8B%E7%9A%84%E8%BF%9E%E6%8E%A5Android%20studio%20%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/</id>
     <published>2021-01-07T16:00:00.000Z</published>
-    <updated>2021-01-19T01:31:16.506Z</updated>
+    <updated>2021-01-19T01:49:26.288Z</updated>
     
     <content type="html"><![CDATA[<p>【原创】<strong>作者：蒋亚奇</strong></p><p>【摘要】   Android Studio在Clean、Rebuild、运行项目时,莫名提示 “你的主机中的软件中止了一个已建立的连接.”   第一反应肯定是哪个应用程序占用了我的adb端口.   Win+R , 输入cmd, 输入 netstat -ano|findstr “5037” PID:18424. 任务栏 - 鼠标右键 - 任务管理器 - 详细信息 - PID …</p><h2 id="场景一成功找到被占用的ADB端口的进程"><a href="#场景一成功找到被占用的ADB端口的进程" class="headerlink" title="场景一成功找到被占用的ADB端口的进程"></a>场景一成功找到被占用的ADB端口的进程</h2><p>一般到这里就结束了,找到的进程都是一些 豌豆荚啊,应用宝啊啥的 手机助手 ADB安装软件助手啥的.<br>然后重试即可,End.</p><h2 id="场景二不按常理出牌"><a href="#场景二不按常理出牌" class="headerlink" title="场景二不按常理出牌"></a>场景二不按常理出牌</h2><p><img src="https://img-blog.csdnimg.cn/20201024121638402.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2MTU4NTUx,size_16,color_FFFFFF,t_70#pic_center" alt="å¨è¿éæå¥å¾çæè¿°"></p><p>占用adb 5037端口的就是我自己啊,<br>杀掉,重试,…<br>无效<br>重新杀掉adb,退出Android Studio,重启电脑,<br>还是不行.关掉自己开的热点WiFi,或者尝试调整一下自己的网络,由无线切换到有线,或者有线切换到无线.<br>重新Clean、Rebuild、运行… 完美解决</p><p><img src="https://img-blog.csdnimg.cn/20201024121958527.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2MTU4NTUx,size_16,color_FFFFFF,t_70#pic_center" alt="å¨è¿éæå¥å¾çæè¿°"></p>]]></content>
     
@@ -37,7 +37,9 @@
     <category term="安卓相关" scheme="http://10.200.66.24/categories/%E5%AE%89%E5%8D%93%E7%9B%B8%E5%85%B3/"/>
     
     
-    <category term="安卓问题，蒋亚奇" scheme="http://10.200.66.24/tags/%E5%AE%89%E5%8D%93%E9%97%AE%E9%A2%98%EF%BC%8C%E8%92%8B%E4%BA%9A%E5%A5%87/"/>
+    <category term="安卓问题" scheme="http://10.200.66.24/tags/%E5%AE%89%E5%8D%93%E9%97%AE%E9%A2%98/"/>
+    
+    <category term="蒋亚奇" scheme="http://10.200.66.24/tags/%E8%92%8B%E4%BA%9A%E5%A5%87/"/>
     
   </entry>
   
@@ -46,7 +48,7 @@
     <link href="http://10.200.66.24/2021/01/08/%E7%9C%81%E7%A4%BE%E4%BF%9D%E5%8D%A1%E6%BF%80%E6%B4%BB%E6%B5%81%E7%A8%8B%E6%80%BB%E7%BB%93/"/>
     <id>http://10.200.66.24/2021/01/08/%E7%9C%81%E7%A4%BE%E4%BF%9D%E5%8D%A1%E6%BF%80%E6%B4%BB%E6%B5%81%E7%A8%8B%E6%80%BB%E7%BB%93/</id>
     <published>2021-01-07T16:00:00.000Z</published>
-    <updated>2021-01-19T01:34:16.373Z</updated>
+    <updated>2021-01-19T01:49:02.876Z</updated>
     
     <content type="html"><![CDATA[<p>【原创】 <strong>作者：蒋亚奇</strong></p><h2 id="获取定位"><a href="#获取定位" class="headerlink" title="获取定位"></a>获取定位</h2><ol><li>checkLocalPermission</li><li>getCNBylocation方法获取定位省份名</li></ol><h2 id="判断工作时间"><a href="#判断工作时间" class="headerlink" title="判断工作时间"></a>判断工作时间</h2><p>CheckTransactionTime -&gt;true </p><h2 id="获取业务流水号"><a href="#获取业务流水号" class="headerlink" title="获取业务流水号"></a>获取业务流水号</h2><p>GenerateBusinessNumber</p><h2 id="ocr识别联网核查"><a href="#ocr识别联网核查" class="headerlink" title="ocr识别联网核查"></a>ocr识别联网核查</h2><ol><li>startOcrCheck – OCR识别联网授权</li><li>showOcr – 开始ocr识别</li><li>OCRVerifyRemote </li><li>sendPhoto – 上传识别图片成功</li><li>MADPContext.launchStage – 进入证件有效期修改页面<h2 id="人脸识别"><a href="#人脸识别" class="headerlink" title="人脸识别"></a>人脸识别</h2></li><li>startAliveCheck</li><li>startFaceAction</li><li>facePicupload -&gt; sendPhoto – 上传识别图片成功</li><li>MADPContext.launchStage – 进入客户端信息修改页面</li></ol><h2 id="音视频登录"><a href="#音视频登录" class="headerlink" title="音视频登录"></a>音视频登录</h2><ol><li>registerLoginAccount – 检查音视频注册</li><li>IMLogin – 音视频登录<h2 id="音视频排队接入"><a href="#音视频排队接入" class="headerlink" title="音视频排队接入"></a>音视频排队接入</h2></li><li>AccessQueue – 加入排队</li><li>ClientNumQry – 排队人数查询</li></ol><h2 id="截图人脸识别"><a href="#截图人脸识别" class="headerlink" title="截图人脸识别"></a>截图人脸识别</h2><p>PicVerify -&gt; sendPhoto</p><h2 id="【问题解决】"><a href="#【问题解决】" class="headerlink" title="【问题解决】"></a>【问题解决】</h2><blockquote><p>【问题描述】：切换到release打包出现闪退问题<br>【解决方案】：添加混淆配置</p></blockquote><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-dontwarn com.netease.**</span><br><span class="line">-keep class com.netease.** &#123;*;&#125;</span><br></pre></td></tr></table></figure>]]></content>
     
@@ -63,7 +65,9 @@
     <category term="安卓相关" scheme="http://10.200.66.24/categories/%E5%AE%89%E5%8D%93%E7%9B%B8%E5%85%B3/"/>
     
     
-    <category term="音视频，蒋亚奇" scheme="http://10.200.66.24/tags/%E9%9F%B3%E8%A7%86%E9%A2%91%EF%BC%8C%E8%92%8B%E4%BA%9A%E5%A5%87/"/>
+    <category term="蒋亚奇" scheme="http://10.200.66.24/tags/%E8%92%8B%E4%BA%9A%E5%A5%87/"/>
+    
+    <category term="音视频" scheme="http://10.200.66.24/tags/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
     
   </entry>
   
